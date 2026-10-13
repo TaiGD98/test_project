@@ -1,19 +1,23 @@
 import * as Phaser from 'phaser';
+import { Boot } from './scenes/Boot';
+import { Menu } from './scenes/Menu';
 import { Game } from './scenes/Game';
+import { WIDTH, HEIGHT, PALETTE } from './game/layout';
 
 // Portrait phone: 390x844 points rendered at 2x for crisp text.
+// Open with ?level=N to jump straight into a level.
 const config: Phaser.Types.Core.GameConfig = {
     type: Phaser.AUTO,
     title: 'Prototype Test',
-    backgroundColor: '#1b1b24',
+    backgroundColor: PALETTE.background,
     scale: {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
         parent: 'game-container',
-        width: 780,
-        height: 1688
+        width: WIDTH,
+        height: HEIGHT
     },
-    scene: [Game]
+    scene: [Boot, Menu, Game]
 };
 
 const game = new Phaser.Game(config);

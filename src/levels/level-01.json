@@ -1,0 +1,43 @@
+{
+  "id": 1,
+  "name": "First Flight",
+  "hpPerEnemy": 40,
+  "grid": [
+    "RB",
+    "BR"
+  ],
+  "stages": [
+    {
+      "enemies": [
+        {
+          "size": "small",
+          "color": "R",
+          "count": 3
+        },
+        {
+          "size": "large",
+          "color": "R"
+        },
+        {
+          "size": "medium",
+          "color": "B",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "enemies": [
+        {
+          "size": "medium",
+          "color": "R",
+          "count": 3
+        },
+        {
+          "size": "large",
+          "color": "B",
+          "count": 2
+        }
+      ]
+    }
+  ]
+}

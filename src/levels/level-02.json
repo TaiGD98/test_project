@@ -1,0 +1,75 @@
+{
+  "id": 2,
+  "name": "Wall Drills",
+  "hpPerEnemy": 35,
+  "grid": [
+    "GBG",
+    "RBR",
+    "BR#"
+  ],
+  "stages": [
+    {
+      "enemies": [
+        {
+          "size": "large",
+          "color": "R",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "R",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "enemies": [
+        {
+          "size": "large",
+          "color": "G",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "G",
+          "count": 3
+        },
+        {
+          "size": "small",
+          "color": "B",
+          "count": 3
+        },
+        {
+          "size": "large",
+          "color": "B"
+        }
+      ]
+    },
+    {
+      "enemies": [
+        {
+          "size": "large",
+          "color": "R"
+        },
+        {
+          "size": "medium",
+          "color": "R"
+        },
+        {
+          "size": "small",
+          "color": "R"
+        },
+        {
+          "size": "medium",
+          "color": "B",
+          "count": 3
+        },
+        {
+          "size": "large",
+          "color": "B",
+          "count": 2
+        }
+      ]
+    }
+  ]
+}

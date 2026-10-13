@@ -1,0 +1,80 @@
+{
+  "id": 3,
+  "name": "Boss Debut",
+  "hpPerEnemy": 30,
+  "grid": [
+    "GRYY",
+    "BRGR",
+    "YBBG"
+  ],
+  "stages": [
+    {
+      "enemies": [
+        {
+          "size": "large",
+          "color": "R",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "B",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "enemies": [
+        {
+          "size": "large",
+          "color": "G"
+        },
+        {
+          "size": "medium",
+          "color": "G"
+        },
+        {
+          "size": "small",
+          "color": "G"
+        },
+        {
+          "size": "medium",
+          "color": "Y",
+          "count": 3
+        },
+        {
+          "size": "medium",
+          "color": "R",
+          "count": 2
+        },
+        {
+          "size": "small",
+          "color": "R",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "boss": {
+        "name": "Iron Hawk",
+        "parts": [
+          {
+            "color": "B",
+            "hp": 36
+          },
+          {
+            "color": "G",
+            "hp": 36
+          },
+          {
+            "color": "Y",
+            "hp": 36
+          },
+          {
+            "color": "R",
+            "hp": 18
+          }
+        ]
+      }
+    }
+  ]
+}

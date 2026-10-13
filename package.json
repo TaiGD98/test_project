@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc --noEmit && vite build",
+    "build": "npm run validate:levels && tsc --noEmit && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "docs:dev": "vitepress dev docs",
@@ -13,7 +13,8 @@
     "docs:preview": "vitepress preview docs",
     "build:site": "bash scripts/build-site.sh",
     "release": "bash scripts/release.sh",
-    "release:latest": "bash scripts/release.sh latest"
+    "release:latest": "bash scripts/release.sh latest",
+    "validate:levels": "node scripts/validate-levels.ts"
   },
   "dependencies": {
     "phaser": "^4.2.1"

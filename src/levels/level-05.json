@@ -1,0 +1,185 @@
+{
+  "id": 5,
+  "name": "Armada",
+  "hpPerEnemy": 20,
+  "zoneHpBonus": 500,
+  "grid": [
+    "KCRGBB",
+    "OY#PPC",
+    "BOOGP#",
+    "GC#RRY",
+    "YRGYK#",
+    "KCKBPO"
+  ],
+  "stages": [
+    {
+      "enemies": [
+        {
+          "size": "large",
+          "color": "R",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "B",
+          "count": 3
+        },
+        {
+          "size": "large",
+          "color": "G",
+          "count": 2
+        },
+        {
+          "size": "large",
+          "color": "Y"
+        },
+        {
+          "size": "medium",
+          "color": "Y"
+        },
+        {
+          "size": "small",
+          "color": "Y"
+        }
+      ]
+    },
+    {
+      "enemies": [
+        {
+          "size": "large",
+          "color": "P",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "O",
+          "count": 3
+        },
+        {
+          "size": "large",
+          "color": "C",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "K",
+          "count": 2
+        },
+        {
+          "size": "small",
+          "color": "K",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "enemies": [
+        {
+          "size": "large",
+          "color": "R",
+          "count": 2
+        },
+        {
+          "size": "large",
+          "color": "B",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "P",
+          "count": 3
+        },
+        {
+          "size": "large",
+          "color": "O",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "G",
+          "count": 3
+        },
+        {
+          "size": "large",
+          "color": "C",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "enemies": [
+        {
+          "size": "large",
+          "color": "Y",
+          "count": 2
+        },
+        {
+          "size": "large",
+          "color": "K",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "R",
+          "count": 3
+        },
+        {
+          "size": "large",
+          "color": "B"
+        },
+        {
+          "size": "medium",
+          "color": "B"
+        },
+        {
+          "size": "small",
+          "color": "B"
+        },
+        {
+          "size": "large",
+          "color": "G",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "boss": {
+        "name": "Dread Armada",
+        "parts": [
+          {
+            "color": "R",
+            "hp": 18
+          },
+          {
+            "color": "B",
+            "hp": 18
+          },
+          {
+            "color": "G",
+            "hp": 18
+          },
+          {
+            "color": "Y",
+            "hp": 36
+          },
+          {
+            "color": "P",
+            "hp": 36
+          },
+          {
+            "color": "O",
+            "hp": 36
+          },
+          {
+            "color": "C",
+            "hp": 36
+          },
+          {
+            "color": "K",
+            "hp": 36
+          }
+        ]
+      }
+    }
+  ]
+}

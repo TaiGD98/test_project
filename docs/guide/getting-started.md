@@ -18,11 +18,16 @@ npm install
 | Command | What it does |
 |---|---|
 | `npm run dev` | Start the game dev server at http://localhost:8080 |
-| `npm run build` | Type-check and build the game into `dist/` |
+| `npm run build` | Check levels, type-check and build the game into `dist/` |
+| `npm run validate:levels` | Check every level for balance and winnability (see [Level design](./level-design)) |
 | `npm run preview` | Serve the built game locally |
 | `npm run docs:dev` | Start the docs dev server |
 | `npm run docs:build` | Build the docs into `docs/.vitepress/dist/` |
 | `npm run build:site` | Build the full Pages site (landing + demo + docs) into `_site/` |
+
+## Jumping to a level
+
+Open http://localhost:8080/?level=3 to skip the menu and start level 3.
 
 ## Testing on a phone
 

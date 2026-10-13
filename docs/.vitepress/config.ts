@@ -43,14 +43,15 @@ export default defineConfig({
                     text: 'II. Gameplay',
                     items: [
                         { text: '2. Core loop', link: '/gdd/core-loop' },
-                        { text: '3. Rules & mechanics', link: '/gdd/rules' }
+                        { text: '3. Rules & mechanics', link: '/gdd/rules' },
+                        { text: '4. Levels & balance', link: '/gdd/levels' }
                     ]
                 },
                 {
                     text: 'III. Production',
                     items: [
-                        { text: '4. Roadmap & open questions', link: '/gdd/roadmap' },
-                        { text: '5. Changelog', link: '/gdd/changelog' }
+                        { text: '5. Roadmap & open questions', link: '/gdd/roadmap' },
+                        { text: '6. Changelog', link: '/gdd/changelog' }
                     ]
                 }
             ],
@@ -59,6 +60,7 @@ export default defineConfig({
                     text: 'Developer guide',
                     items: [
                         { text: 'Getting Started', link: '/guide/getting-started' },
+                        { text: 'Level design', link: '/guide/level-design' },
                         { text: 'Deployment', link: '/guide/deployment' },
                         { text: 'Game Design Document →', link: '/gdd/' }
                     ]

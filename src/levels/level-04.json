@@ -1,0 +1,130 @@
+{
+  "id": 4,
+  "name": "Crossfire",
+  "hpPerEnemy": 25,
+  "grid": [
+    "RROGB",
+    "OBYPG",
+    "PGYRY",
+    "PBBRO"
+  ],
+  "stages": [
+    {
+      "enemies": [
+        {
+          "size": "large",
+          "color": "R",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "B",
+          "count": 3
+        },
+        {
+          "size": "large",
+          "color": "G"
+        },
+        {
+          "size": "medium",
+          "color": "G"
+        },
+        {
+          "size": "small",
+          "color": "G"
+        }
+      ]
+    },
+    {
+      "enemies": [
+        {
+          "size": "large",
+          "color": "Y",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "P",
+          "count": 3
+        },
+        {
+          "size": "small",
+          "color": "O",
+          "count": 6
+        },
+        {
+          "size": "large",
+          "color": "R"
+        },
+        {
+          "size": "medium",
+          "color": "R"
+        },
+        {
+          "size": "small",
+          "color": "R"
+        }
+      ]
+    },
+    {
+      "enemies": [
+        {
+          "size": "large",
+          "color": "B",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "G",
+          "count": 3
+        },
+        {
+          "size": "medium",
+          "color": "Y",
+          "count": 2
+        },
+        {
+          "size": "small",
+          "color": "Y",
+          "count": 2
+        },
+        {
+          "size": "large",
+          "color": "O",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "boss": {
+        "name": "Twin Talon",
+        "parts": [
+          {
+            "color": "R",
+            "hp": 36
+          },
+          {
+            "color": "B",
+            "hp": 36
+          },
+          {
+            "color": "G",
+            "hp": 18
+          },
+          {
+            "color": "Y",
+            "hp": 18
+          },
+          {
+            "color": "P",
+            "hp": 36
+          },
+          {
+            "color": "O",
+            "hp": 18
+          }
+        ]
+      }
+    }
+  ]
+}
