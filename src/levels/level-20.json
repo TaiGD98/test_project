@@ -1,0 +1,265 @@
+{
+  "id": 20,
+  "name": "Blackout",
+  "hpPerEnemy": 20,
+  "grid": [
+    "CRBvKR",
+    "CCPY#G",
+    "RKYPOO",
+    "PGPvR^",
+    "OBKPGY",
+    "#OKYBB"
+  ],
+  "elevators": {
+    "3,3": "OGY",
+    "0,3": "RCB",
+    "3,5": "PKCG"
+  },
+  "mystery": [
+    "1,0",
+    "1,1",
+    "2,3",
+    "2,4",
+    "3,2",
+    "3,4",
+    "4,1",
+    "4,4",
+    "5,2",
+    "5,3"
+  ],
+  "stages": [
+    {
+      "enemies": [
+        {
+          "size": "large",
+          "color": "K",
+          "count": 2
+        },
+        {
+          "size": "large",
+          "color": "O",
+          "count": 2
+        },
+        {
+          "size": "large",
+          "color": "B",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "enemies": [
+        {
+          "size": "medium",
+          "color": "O",
+          "count": 3
+        },
+        {
+          "size": "medium",
+          "color": "B",
+          "count": 3
+        },
+        {
+          "size": "large",
+          "color": "O",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "enemies": [
+        {
+          "size": "medium",
+          "color": "O"
+        },
+        {
+          "size": "small",
+          "color": "O"
+        },
+        {
+          "size": "medium",
+          "color": "Y",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "R",
+          "count": 3
+        },
+        {
+          "size": "large",
+          "color": "O"
+        },
+        {
+          "size": "medium",
+          "color": "P",
+          "count": 5
+        },
+        {
+          "size": "medium",
+          "color": "C",
+          "count": 3
+        },
+        {
+          "size": "small",
+          "color": "P",
+          "count": 2
+        },
+        {
+          "size": "small",
+          "color": "Y",
+          "count": 2
+        },
+        {
+          "size": "large",
+          "color": "C",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "enemies": [
+        {
+          "size": "large",
+          "color": "C",
+          "count": 2
+        },
+        {
+          "size": "small",
+          "color": "Y"
+        },
+        {
+          "size": "large",
+          "color": "P",
+          "count": 2
+        },
+        {
+          "size": "large",
+          "color": "Y"
+        },
+        {
+          "size": "large",
+          "color": "G",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "Y"
+        }
+      ]
+    },
+    {
+      "enemies": [
+        {
+          "size": "medium",
+          "color": "K",
+          "count": 2
+        },
+        {
+          "size": "small",
+          "color": "K",
+          "count": 2
+        },
+        {
+          "size": "large",
+          "color": "Y",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "G",
+          "count": 3
+        },
+        {
+          "size": "large",
+          "color": "B",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "R",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "enemies": [
+        {
+          "size": "large",
+          "color": "K",
+          "count": 2
+        },
+        {
+          "size": "small",
+          "color": "Y",
+          "count": 2
+        },
+        {
+          "size": "small",
+          "color": "G",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "Y",
+          "count": 2
+        },
+        {
+          "size": "large",
+          "color": "P",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "G",
+          "count": 5
+        },
+        {
+          "size": "medium",
+          "color": "R",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "boss": {
+        "name": "Black Star",
+        "parts": [
+          {
+            "color": "K",
+            "hp": 36
+          },
+          {
+            "color": "Y",
+            "hp": 18
+          },
+          {
+            "color": "G",
+            "hp": 18
+          },
+          {
+            "color": "O",
+            "hp": 18
+          },
+          {
+            "color": "P",
+            "hp": 36
+          },
+          {
+            "color": "C",
+            "hp": 36
+          },
+          {
+            "color": "B",
+            "hp": 36
+          },
+          {
+            "color": "R",
+            "hp": 36
+          }
+        ],
+        "design": "dreadnought"
+      }
+    }
+  ]
+}

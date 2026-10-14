@@ -1,0 +1,73 @@
+{
+  "id": 11,
+  "name": "Fog of War",
+  "hpPerEnemy": 40,
+  "tutorial": {
+    "focus": "mystery",
+    "text": "Mystery fighters hide their colour\nuntil they have a way out"
+  },
+  "grid": [
+    "BBB",
+    "BCC",
+    "BCC"
+  ],
+  "mystery": [
+    "1,1",
+    "1,2",
+    "2,0"
+  ],
+  "stages": [
+    {
+      "enemies": [
+        {
+          "size": "medium",
+          "color": "C",
+          "count": 2
+        },
+        {
+          "size": "large",
+          "color": "B",
+          "count": 5
+        },
+        {
+          "size": "small",
+          "color": "C",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "B",
+          "count": 4
+        },
+        {
+          "size": "large",
+          "color": "C",
+          "count": 2
+        },
+        {
+          "size": "small",
+          "color": "B"
+        }
+      ]
+    },
+    {
+      "enemies": [
+        {
+          "size": "small",
+          "color": "B",
+          "count": 2
+        },
+        {
+          "size": "large",
+          "color": "C",
+          "count": 4
+        },
+        {
+          "size": "medium",
+          "color": "B",
+          "count": 2
+        }
+      ]
+    }
+  ]
+}

@@ -2,9 +2,10 @@ import * as Phaser from 'phaser';
 import { Boss, BossPart, EnemyShip, Fighter, type Target } from '../game/entities';
 import { ENEMY_WIDTH, FIGHTER_ZONE_SIZE, HEIGHT, LAYOUT, PALETTE, TIMING, WIDTH } from '../game/layout';
 import { LEVELS, markCleared } from '../game/levels';
-import { byPriority, findExitPath, isShielded, layoutStage, parseGrid, zoneHp, type Cell, type LevelData } from '../game/logic';
+import { byPriority, canLaunch, findExitPath, isShielded, layoutStage, parseGrid, releaseElevator, thawStep, tutorialSteps, zoneHp, type Cell, type Dir, type LevelData, type Pos, type TutorialStep } from '../game/logic';
 import { COLORS, RULES, type ColorKey } from '../game/rules';
-import { button, label } from '../game/ui';
+import { addSpaceBackground } from '../game/art';
+import { FONT, NEON, button, drawPanel, label } from '../game/ui';
 
 const DEPTH = { board: 0, enemies: 20, bullets: 30, zone: 40, launching: 45, fx: 50, hud: 100, panel: 1000 };
 
@@ -47,8 +48,15 @@ export class Game extends Phaser.Scene {
     private hpText!: Phaser.GameObjects.Text;
     private hpBar!: Phaser.GameObjects.Graphics;
     private zoneFlash!: Phaser.GameObjects.Rectangle;
-    private stageText!: Phaser.GameObjects.Text;
+    private progress!: Phaser.GameObjects.Graphics;
+    private bossTag: Phaser.GameObjects.Text | null = null;
     private toastText!: Phaser.GameObjects.Text;
+    private scrollStars: (dt: number) => void = () => {};
+    /** Fighters rolling out of an elevator; the level can't be declared stuck meanwhile. */
+    private arriving = 0;
+    private thawHintShown = false;
+    /** Elevator displays keyed "row,col": remaining count and a preview of the next fighter. */
+    private lifts = new Map<string, { count: Phaser.GameObjects.Text; next: Phaser.GameObjects.Image }>();
 
     constructor() {
         super('Game');
@@ -73,35 +81,56 @@ export class Game extends Phaser.Scene {
         this.hp = this.maxHp = zoneHp(this.level);
         this.ended = false;
         this.idleMs = 0;
+        this.arriving = 0;
+        this.thawHintShown = false;
+        this.lifts = new Map();
     }
 
     create() {
         this.drawBackground();
         this.drawHud();
         this.buildBoard();
-        this.startStage(0);
+        if (this.level.tutorial) this.showTutorial(tutorialSteps(this.level.tutorial), () => this.startStage(0));
+        else this.startStage(0);
     }
 
     // ---------------------------------------------------------------- layout
 
     private drawBackground() {
+        this.scrollStars = addSpaceBackground(this);
+        // Flight zone: an energy shield band with glowing edges.
         const g = this.add.graphics().setDepth(DEPTH.board);
-        g.fillStyle(PALETTE.enemyArea);
-        g.fillRect(0, LAYOUT.hudHeight, WIDTH, LAYOUT.zoneTop - LAYOUT.hudHeight);
-        g.fillStyle(PALETTE.zone);
-        g.fillRect(0, LAYOUT.zoneTop, WIDTH, LAYOUT.zoneBottom - LAYOUT.zoneTop);
-        g.lineStyle(3, PALETTE.zoneLine);
+        const zh = LAYOUT.zoneBottom - LAYOUT.zoneTop;
+        g.fillGradientStyle(NEON, NEON, NEON, NEON, 0.02, 0.02, 0.12, 0.12);
+        g.fillRect(0, LAYOUT.zoneTop, WIDTH, zh / 2);
+        g.fillGradientStyle(NEON, NEON, NEON, NEON, 0.12, 0.12, 0.02, 0.02);
+        g.fillRect(0, LAYOUT.zoneTop + zh / 2, WIDTH, zh / 2);
         for (const y of [LAYOUT.zoneTop, LAYOUT.zoneBottom]) {
-            for (let x = 0; x < WIDTH; x += 36) g.lineBetween(x, y, x + 20, y);
+            g.lineStyle(10, NEON, 0.12);
+            g.lineBetween(0, y, WIDTH, y);
+            g.lineStyle(3, NEON, 0.8);
+            g.lineBetween(0, y, WIDTH, y);
         }
+        g.fillStyle(NEON, 0.18);
+        for (let x = 20; x < WIDTH; x += 40) for (let y = LAYOUT.zoneTop + 20; y < LAYOUT.zoneBottom; y += 40) g.fillCircle(x, y, 2);
         this.zoneFlash = this.add
-            .rectangle(WIDTH / 2, (LAYOUT.zoneTop + LAYOUT.zoneBottom) / 2, WIDTH, LAYOUT.zoneBottom - LAYOUT.zoneTop, 0xff3b3b, 1)
+            .rectangle(WIDTH / 2, (LAYOUT.zoneTop + LAYOUT.zoneBottom) / 2, WIDTH, zh, 0xff3b3b, 1)
             .setDepth(DEPTH.board)
+            .setBlendMode(Phaser.BlendModes.ADD)
             .setAlpha(0);
-        const style = { fontFamily: 'Arial Black, Arial', fontSize: '24px', color: PALETTE.textDim };
+        const style = {
+            fontFamily: FONT,
+            fontSize: '24px',
+            color: '#bfefff',
+            stroke: '#05060f',
+            strokeThickness: 5
+        };
         this.zoneText = this.add.text(24, LAYOUT.zoneTop + 24, '', style).setOrigin(0, 0.5).setDepth(DEPTH.hud);
         this.hpText = this.add.text(WIDTH - 24, LAYOUT.zoneTop + 24, '', style).setOrigin(1, 0.5).setDepth(DEPTH.hud);
         this.hpBar = this.add.graphics().setDepth(DEPTH.hud);
+        // Zone HP only exists while enemy fire is on (see RULES.enemyFire).
+        this.hpText.setVisible(RULES.enemyFire);
+        this.hpBar.setVisible(RULES.enemyFire);
         this.updateZoneText();
         this.updateHp();
         this.toastText = label(this, WIDTH / 2, LAYOUT.zoneTop - 40, '', 30, PALETTE.danger).setDepth(DEPTH.hud).setAlpha(0);
@@ -109,12 +138,22 @@ export class Game extends Phaser.Scene {
 
     private drawHud() {
         const g = this.add.graphics().setDepth(DEPTH.hud);
-        g.fillStyle(0x15151d);
+        g.fillGradientStyle(0x0a0f22, 0x0a0f22, 0x0a0f22, 0x0a0f22, 0.95, 0.95, 0.55, 0.55);
         g.fillRect(0, 0, WIDTH, LAYOUT.hudHeight);
-        label(this, WIDTH / 2, 55, `Level ${this.level.id} · ${this.level.name}`, 34).setDepth(DEPTH.hud);
-        this.stageText = label(this, WIDTH / 2, 108, '', 26, PALETTE.textDim).setDepth(DEPTH.hud);
-        button(this, 70, 75, 100, 84, '‹', () => this.scene.start('Menu'), 0x34344c, 48).setDepth(DEPTH.hud);
-        button(this, WIDTH - 70, 75, 100, 84, '↻', () => this.scene.restart({ index: this.index }), 0x34344c, 44).setDepth(DEPTH.hud);
+        g.lineStyle(8, NEON, 0.15);
+        g.lineBetween(0, LAYOUT.hudHeight, WIDTH, LAYOUT.hudHeight);
+        g.lineStyle(3, NEON, 0.8);
+        g.lineBetween(0, LAYOUT.hudHeight, WIDTH, LAYOUT.hudHeight);
+        label(this, WIDTH / 2, 55, `Level ${this.level.id} · ${this.level.name}`, 36).setDepth(DEPTH.hud);
+        this.progress = this.add.graphics().setDepth(DEPTH.hud);
+        if (this.level.stages.at(-1)?.boss) {
+            this.bossTag = this.add
+                .text(0, 110, 'BOSS', { fontFamily: FONT, fontSize: '20px', color: '#ff9a9a', stroke: '#05060f', strokeThickness: 4 })
+                .setOrigin(0.5)
+                .setDepth(DEPTH.hud);
+        }
+        button(this, 70, 75, 100, 84, '‹', () => this.scene.start('Menu'), undefined, 48).setDepth(DEPTH.hud);
+        button(this, WIDTH - 70, 75, 100, 84, '↻', () => this.scene.restart({ index: this.index }), undefined, 44).setDepth(DEPTH.hud);
     }
 
     private cellCenter(row: number, col: number) {
@@ -128,70 +167,187 @@ export class Game extends Phaser.Scene {
         this.boardX = (WIDTH - cols * this.cell) / 2;
         this.boardY = LAYOUT.boardTop;
 
+        // Hangar deck: a metal panel with a glowing edge; the top edge is the exit.
         const g = this.add.graphics().setDepth(DEPTH.board);
-        // Exit edge: fighters leave the board upwards.
-        g.fillStyle(PALETTE.zoneLine, 0.6);
-        g.fillRect(this.boardX, this.boardY - 10, cols * this.cell, 4);
+        const m = 18;
+        drawPanel(g, this.boardX - m, this.boardY - m, cols * this.cell + m * 2, rows * this.cell + m * 2, 0x0c1224, NEON, 22);
+        g.fillStyle(0xffd36b, 0.9);
+        for (let x = this.boardX; x < this.boardX + cols * this.cell; x += 28) g.fillTriangle(x + 6, this.boardY - 6, x + 20, this.boardY - 6, x + 13, this.boardY - 13);
 
-        const pad = Math.max(2, this.cell * 0.04);
-        const r = this.cell * 0.14;
         this.grid.forEach((line, row) => {
             this.board.push([]);
             line.forEach((c, col) => {
-                const x = this.boardX + col * this.cell;
-                const y = this.boardY + row * this.cell;
-                // Every cell gets a floor tile so vacated cells read as empty space.
-                g.fillStyle(PALETTE.cell);
-                g.fillRoundedRect(x + pad, y + pad, this.cell - pad * 2, this.cell - pad * 2, r);
-                if (c.kind === 'wall') {
-                    g.fillStyle(PALETTE.wall);
-                    g.fillRoundedRect(x + pad, y + pad, this.cell - pad * 2, this.cell - pad * 2, r);
-                    g.lineStyle(3, PALETTE.wallEdge);
-                    g.strokeRoundedRect(x + pad, y + pad, this.cell - pad * 2, this.cell - pad * 2, r);
-                    g.lineBetween(x + this.cell * 0.3, y + this.cell * 0.3, x + this.cell * 0.7, y + this.cell * 0.7);
-                    g.lineBetween(x + this.cell * 0.7, y + this.cell * 0.3, x + this.cell * 0.3, y + this.cell * 0.7);
-                }
+                const p = this.cellCenter(row, col);
+                // Every cell gets a landing slot so vacated cells read as empty space.
+                this.add.image(p.x, p.y, 'slot').setDisplaySize(this.cell, this.cell).setDepth(DEPTH.board);
+                if (c.kind === 'wall') this.add.image(p.x, p.y, 'crate').setDisplaySize(this.cell, this.cell).setDepth(DEPTH.board);
+                if (c.kind === 'elevator') this.buildLift(row, col, c.dir);
                 if (c.kind !== 'fighter') {
                     this.board[row].push(null);
                     return;
                 }
-                const p = this.cellCenter(row, col);
-                const f = new Fighter(this, p.x, p.y, row, col, c.color, c.ammo);
-                f.setScale((this.cell * 0.84) / FIGHTER_ZONE_SIZE).setDepth(DEPTH.board + 1);
-                f.sprite.setInteractive({ useHandCursor: true }).on('pointerdown', () => this.tapFighter(f));
-                this.board[row].push(f);
+                this.board[row].push(this.makeFighter(row, col, c.color, c.ammo, p.x, p.y, { hidden: c.hidden, frozen: c.frozen }));
             });
         });
         this.refreshTappable();
     }
 
+    private makeFighter(row: number, col: number, color: ColorKey, ammo: number, x: number, y: number, opts: { hidden?: boolean; frozen?: number } = {}) {
+        const f = new Fighter(this, x, y, row, col, color, ammo, opts);
+        f.setScale((this.cell * 0.84) / FIGHTER_ZONE_SIZE).setDepth(DEPTH.board + 1);
+        f.sprite.setInteractive({ useHandCursor: true }).on('pointerdown', () => this.tapFighter(f));
+        return f;
+    }
+
+    // ---------------------------------------------------------------- elevators
+
+    private buildLift(row: number, col: number, dir: Dir) {
+        const p = this.cellCenter(row, col);
+        const angle = { up: 0, right: 90, down: 180, left: -90 }[dir];
+        this.add.image(p.x, p.y, 'elevator').setDisplaySize(this.cell, this.cell).setAngle(angle).setDepth(DEPTH.board);
+        const next = this.add.image(p.x, p.y, 'fighter-R').setDisplaySize(this.cell * 0.46, this.cell * 0.46).setAngle(angle).setDepth(DEPTH.board);
+        const count = this.add
+            .text(p.x + this.cell * 0.3, p.y + this.cell * 0.3, '', { fontFamily: FONT, fontSize: `${Math.round(this.cell * 0.26)}px`, color: '#ffffff', stroke: '#05060f', strokeThickness: 5 })
+            .setOrigin(0.5)
+            .setDepth(DEPTH.board + 2);
+        this.lifts.set(`${row},${col}`, { count, next });
+        this.updateLift(row, col);
+    }
+
+    /** Shows how many fighters are left inside and a dim preview of the next one. */
+    private updateLift(row: number, col: number) {
+        const cell = this.grid[row][col];
+        const view = this.lifts.get(`${row},${col}`);
+        if (!view || cell.kind !== 'elevator') return;
+        view.count.setText(String(cell.queue.length)).setColor(cell.queue.length ? '#ffffff' : '#6f7f9f');
+        if (cell.queue.length) view.next.setTexture(`fighter-${cell.queue[0].color}`).setVisible(true).setAlpha(0.55);
+        else view.next.setVisible(false);
+    }
+
+    /** After a cell is vacated, an elevator facing it rolls its next fighter out into it. */
+    private releaseInto(cell: Pos) {
+        const out = releaseElevator(this.grid, cell);
+        if (!out) return;
+        const from = this.cellCenter(out.from.row, out.from.col);
+        const to = this.cellCenter(cell.row, cell.col);
+        const f = this.makeFighter(cell.row, cell.col, out.color, out.ammo, from.x, from.y);
+        f.state = 'arriving';
+        f.setScale(f.scale * 0.6).setAlpha(0);
+        this.board[cell.row][cell.col] = f;
+        this.arriving++;
+        this.updateLift(out.from.row, out.from.col);
+        this.tweens.add({
+            targets: f,
+            x: to.x,
+            y: to.y,
+            alpha: 1,
+            scale: (this.cell * 0.84) / FIGHTER_ZONE_SIZE,
+            duration: 260,
+            ease: 'Back.easeOut',
+            onComplete: () => {
+                f.state = 'board';
+                this.arriving--;
+                this.refreshTappable();
+            }
+        });
+    }
+
+    /** Every launch counts down each frozen fighter; at 0 its ice shatters. */
+    private thaw() {
+        for (const c of thawStep(this.grid)) {
+            this.board[c.row][c.col]?.setFrozen(c.frozen);
+            const hint = this.level.tutorial && 'steps' in this.level.tutorial ? this.level.tutorial.onThaw : undefined;
+            if (c.frozen === 0 && hint && !this.thawHintShown) {
+                this.thawHintShown = true;
+                this.time.delayedCall(450, () => this.toast(hint, '#bff3ff', 2600));
+            }
+        }
+    }
+
+    /**
+     * First-play tutorial: one card per step. Each dims everything except the first cell of the
+     * step's kind (elevator, mystery or frozen fighter) and shows its text; tap to go on.
+     */
+    private showTutorial(steps: TutorialStep[], done: () => void): void {
+        const step = steps[0];
+        if (!step) return done();
+        const find = (c: Cell) =>
+            step.focus === 'elevator' ? c.kind === 'elevator' : c.kind === 'fighter' && (step.focus === 'mystery' ? !!c.hidden : !!c.frozen);
+        const row = this.grid.findIndex((line) => line.some(find));
+        if (row < 0) return this.showTutorial(steps.slice(1), done);
+        const at: Pos = { row, col: this.grid[row].findIndex(find) };
+        const focused = this.grid[at.row][at.col];
+        const text = step.text.replace('{n}', String(focused.kind === 'fighter' ? (focused.frozen ?? '') : ''));
+        const p = this.cellCenter(at.row, at.col);
+        const r = this.cell * 0.62;
+        const shade = this.add.graphics().setDepth(DEPTH.panel);
+        shade.fillStyle(0x000000, 0.78);
+        // Four rects around a square hole over the focused cell.
+        shade.fillRect(0, 0, WIDTH, p.y - r);
+        shade.fillRect(0, p.y + r, WIDTH, HEIGHT - p.y - r);
+        shade.fillRect(0, p.y - r, p.x - r, r * 2);
+        shade.fillRect(p.x + r, p.y - r, WIDTH - p.x - r, r * 2);
+        const ring = this.add.graphics().setDepth(DEPTH.panel);
+        ring.lineStyle(6, NEON, 1);
+        ring.strokeRoundedRect(p.x - r, p.y - r, r * 2, r * 2, 16);
+        this.tweens.add({ targets: ring, alpha: 0.35, duration: 600, yoyo: true, repeat: -1 });
+        const label1 = label(this, WIDTH / 2, LAYOUT.zoneTop + 30, text, 36).setAlign('center').setDepth(DEPTH.panel);
+        const arrow = label(this, p.x, p.y - r - 46, '▼', 44, '#4fd8ff').setDepth(DEPTH.panel);
+        this.tweens.add({ targets: arrow, y: arrow.y + 12, duration: 450, yoyo: true, repeat: -1 });
+        const more = steps.length > 1 ? `Tap to continue (${steps.length - 1} more)` : 'Tap to continue';
+        const hint = label(this, WIDTH / 2, LAYOUT.zoneTop + 140, more, 28, PALETTE.textDim).setDepth(DEPTH.panel);
+        const hit = this.add.zone(WIDTH / 2, HEIGHT / 2, WIDTH, HEIGHT).setInteractive().setDepth(DEPTH.panel);
+        this.time.delayedCall(500, () =>
+            hit.once('pointerup', () => {
+                for (const o of [shade, ring, label1, arrow, hint, hit]) {
+                    this.tweens.killTweensOf(o);
+                    o.destroy();
+                }
+                this.showTutorial(steps.slice(1), done);
+            })
+        );
+    }
+
     private refreshTappable() {
-        for (const line of this.board) for (const f of line) if (f) f.setTappable(!!findExitPath(this.grid, f));
+        for (const line of this.board) {
+            for (const f of line) {
+                if (!f || f.state !== 'board') continue;
+                const hasPath = !!findExitPath(this.grid, f);
+                f.setTappable(hasPath && !f.frozen, hasPath);
+            }
+        }
     }
 
     private updateZoneText() {
         const used = this.zone.length + this.launching;
-        this.zoneText.setText(`Flight zone ${used}/${RULES.flightZoneCapacity}`);
-        this.zoneText.setColor(used >= RULES.flightZoneCapacity ? PALETTE.danger : PALETTE.textDim);
+        this.zoneText.setText(`${used}/${RULES.flightZoneCapacity}`);
+        this.zoneText.setColor(used >= RULES.flightZoneCapacity ? PALETTE.danger : '#bfefff');
     }
 
     private updateHp() {
-        const w = 200;
+        const w = 220;
         const x = WIDTH - 24 - w;
         const y = LAYOUT.zoneTop + 46;
         const f = this.hp / this.maxHp;
+        const color = f > 0.5 ? 0x4ade80 : f > 0.25 ? 0xfacc15 : 0xef4444;
         this.hpBar.clear();
-        this.hpBar.fillStyle(0x15151d);
-        this.hpBar.fillRoundedRect(x, y, w, 14, 7);
-        this.hpBar.fillStyle(f > 0.5 ? 0x4ade80 : f > 0.25 ? 0xfacc15 : 0xef4444);
-        if (f > 0) this.hpBar.fillRoundedRect(x, y, Math.max(14, w * f), 14, 7);
+        this.hpBar.fillStyle(0x05060f, 0.9);
+        this.hpBar.fillRoundedRect(x - 3, y - 3, w + 6, 20, 9);
+        if (f > 0) {
+            this.hpBar.fillStyle(color, 0.25);
+            this.hpBar.fillRoundedRect(x - 2, y - 4, Math.max(16, w * f) + 4, 22, 10);
+            this.hpBar.fillStyle(color);
+            this.hpBar.fillRoundedRect(x, y, Math.max(14, w * f), 14, 7);
+            this.hpBar.fillStyle(0xffffff, 0.35);
+            this.hpBar.fillRect(x + 6, y + 2, Math.max(0, w * f - 12), 3);
+        }
         this.hpText.setText(`HP ${this.hp}/${this.maxHp}`);
     }
 
-    private toast(msg: string) {
+    private toast(msg: string, color: string = PALETTE.danger, hold = 900) {
         this.tweens.killTweensOf(this.toastText);
-        this.toastText.setText(msg).setAlpha(1);
-        this.tweens.add({ targets: this.toastText, alpha: 0, delay: 900, duration: 400 });
+        this.toastText.setText(msg).setColor(color).setAlpha(1);
+        this.tweens.add({ targets: this.toastText, alpha: 0, delay: hold, duration: 400 });
     }
 
     // ---------------------------------------------------------------- fighters
@@ -200,6 +356,11 @@ export class Game extends Phaser.Scene {
         if (this.ended || f.state !== 'board') return;
         const path = findExitPath(this.grid, f);
         const nudge = () => this.tweens.add({ targets: f, x: f.x + 8, duration: 45, yoyo: true, repeat: 2 });
+        if (f.frozen) {
+            nudge();
+            this.toast(`Frozen: launch ${f.frozen} more fighter${f.frozen > 1 ? 's' : ''}`);
+            return;
+        }
         if (!path) {
             nudge();
             this.toast('No way out: clear a path to the top');
@@ -214,9 +375,12 @@ export class Game extends Phaser.Scene {
 
         this.grid[f.row][f.col] = { kind: 'empty' };
         this.board[f.row][f.col] = null;
+        this.releaseInto({ row: f.row, col: f.col });
+        this.thaw();
         f.state = 'launching';
         f.sprite.disableInteractive();
         f.setTappable(true).setDepth(DEPTH.launching);
+        f.ignite();
         this.launching++;
         this.updateZoneText();
         this.refreshTappable();
@@ -276,7 +440,7 @@ export class Game extends Phaser.Scene {
         this.stage = i;
         this.stageActive = false;
         const data = this.level.stages[i];
-        this.stageText.setText(`Stage ${i + 1}/${this.level.stages.length}`);
+        this.drawProgress(i);
         const layout = layoutStage(data);
 
         let delay = 0;
@@ -290,7 +454,7 @@ export class Game extends Phaser.Scene {
         }
         if (layout.boss) {
             const parts = layout.targets.filter((t) => t.kind === 'part');
-            const boss = new Boss(this, layout.boss.x, layout.boss.y, layout.boss.name, parts).setDepth(DEPTH.enemies);
+            const boss = new Boss(this, layout.boss.x, layout.boss.y, layout.boss.name, data.boss!.design ?? 'raptor', parts).setDepth(DEPTH.enemies);
             boss.y -= 900;
             this.tweens.add({ targets: boss, y: boss.baseY, delay, duration: 1100, ease: 'Cubic.easeOut' });
             delay += 450;
@@ -299,7 +463,6 @@ export class Game extends Phaser.Scene {
         }
         this.refreshShields();
 
-        this.banner(data.boss ? `BOSS\n${data.boss.name}` : `Stage ${i + 1}`, !!data.boss);
         this.time.delayedCall(delay + 700, () => {
             if (!this.ended) this.stageActive = true;
         });
@@ -314,20 +477,53 @@ export class Game extends Phaser.Scene {
         for (const t of this.targets) if (t.hp > 0) (t as EnemyShip | BossPart).setShielded(!this.visible.includes(t));
     }
 
-    private banner(text: string, boss: boolean) {
-        const b = label(this, WIDTH / 2, 520, text, boss ? 72 : 64, boss ? '#ff6b6b' : '#ffffff')
-            .setAlign('center')
-            .setDepth(DEPTH.fx)
-            .setScale(0.6)
-            .setAlpha(0);
-        this.tweens.chain({
-            targets: b,
-            tweens: [
-                { alpha: 1, scale: 1, duration: 260, ease: 'Back.easeOut' },
-                { alpha: 0, duration: 350, delay: boss ? 900 : 500 }
-            ],
-            onComplete: () => b.destroy()
-        });
+    /**
+     * Stage progress in the HUD: one dot per stage on a line. Cleared stages stay lit, the current
+     * one glows; a boss stage is a "BOSS" badge instead of a dot.
+     */
+    private drawProgress(current: number) {
+        const n = this.level.stages.length;
+        const hasBoss = !!this.bossTag;
+        // Centres spaced so the gap between neighbours is constant, whole row centred.
+        const gap = 28;
+        const widths = this.level.stages.map((_, i) => (hasBoss && i === n - 1 ? 74 : 18));
+        const xs = [0];
+        for (let i = 1; i < n; i++) xs.push(xs[i - 1] + (widths[i - 1] + widths[i]) / 2 + gap);
+        const shift = WIDTH / 2 - (xs[n - 1] + widths[n - 1] / 2 - widths[0] / 2) / 2;
+        for (let i = 0; i < n; i++) xs[i] += shift;
+        const y = 110;
+        const g = this.progress;
+        g.clear();
+        g.lineStyle(4, 0x23324f);
+        g.lineBetween(xs[0], y, xs[n - 1], y);
+        if (current > 0) {
+            g.lineStyle(4, NEON, 0.9);
+            g.lineBetween(xs[0], y, xs[current], y);
+        }
+        for (let i = 0; i < n; i++) {
+            const lit = i <= current;
+            if (hasBoss && i === n - 1) {
+                const red = 0xff4d5e;
+                if (i === current) {
+                    g.fillStyle(red, 0.3);
+                    g.fillRoundedRect(xs[i] - 44, y - 21, 88, 42, 21);
+                }
+                g.fillStyle(lit ? 0x5c1a22 : 0x111a2e);
+                g.fillRoundedRect(xs[i] - 37, y - 15, 74, 30, 15);
+                g.lineStyle(3, lit ? red : 0x3a4a6a);
+                g.strokeRoundedRect(xs[i] - 37, y - 15, 74, 30, 15);
+                this.bossTag!.setPosition(xs[i], y).setColor(lit ? '#ffffff' : '#6f7f9f');
+                continue;
+            }
+            if (i === current) {
+                g.fillStyle(NEON, 0.3);
+                g.fillCircle(xs[i], y, 16);
+            }
+            g.fillStyle(lit ? NEON : 0x111a2e);
+            g.fillCircle(xs[i], y, 9);
+            g.lineStyle(3, lit ? 0xe6fbff : 0x3a4a6a);
+            g.strokeCircle(xs[i], y, 9);
+        }
     }
 
     private checkStageClear() {
@@ -348,13 +544,14 @@ export class Game extends Phaser.Scene {
 
     update(time: number, delta: number) {
         const dt = delta / 1000;
+        this.scrollStars(dt);
         const sway = Math.sin(time / 900) * 22;
         for (const e of this.enemies) if (e.active) e.x = e.spec.x + sway;
         if (this.boss?.active) this.boss.x = this.boss.baseX + sway;
 
         const canShoot = this.updateFighters(time, dt);
         this.updateBullets(dt);
-        if (this.stageActive && !this.ended) this.updateEnemyFire(dt);
+        if (RULES.enemyFire && this.stageActive && !this.ended) this.updateEnemyFire(dt);
         this.updateEnemyBullets(dt);
         this.checkStuck(delta, canShoot);
     }
@@ -402,33 +599,26 @@ export class Game extends Phaser.Scene {
         target.pending++;
         f.spendShot();
         f.cooldown = TIMING.fireInterval;
-        const img = this.add.image(f.x, f.noseY, 'bullet').setTint(COLORS[f.color].hex).setDepth(DEPTH.bullets);
+        const img = this.add.image(f.x, f.noseY, `plasma-${f.color}`).setBlendMode(Phaser.BlendModes.ADD).setDepth(DEPTH.bullets);
         this.bullets.push({ img, target });
+        this.flash(f.x, f.noseY, COLORS[f.color].hex, 0.5);
         if (f.ammo === 0) this.leave(f);
     }
 
-    /** Bullets fly straight up and only steer into the target's centre in the last stretch. */
+    /**
+     * Bullets fly straight up and hit when they reach the front quarter of their target. The
+     * fighter lined up under the target before firing, and the formation drifts only a few px
+     * during the flight, so a bullet always lands inside the target it was fired at.
+     */
     private updateBullets(dt: number) {
         const step = TIMING.bulletSpeed * dt;
         this.bullets = this.bullets.filter((b) => {
-            const tx = b.target.worldX();
-            const ty = b.target.worldY();
-            if (b.img.y - ty > TIMING.bulletHomingRange) {
-                b.img.y -= step;
-                return true;
-            }
-            const dx = tx - b.img.x;
-            const dy = ty - b.img.y;
-            const d = Math.hypot(dx, dy);
-            if (d <= step + 12) {
-                b.img.destroy();
-                if (b.target.hit()) this.onDestroyed(b.target);
-                return false;
-            }
-            b.img.x += (dx / d) * step;
-            b.img.y += (dy / d) * step;
-            b.img.rotation = Math.atan2(dy, dx) + Math.PI / 2;
-            return true;
+            b.img.y -= step;
+            if (b.img.y > b.target.worldY() + b.target.spec.h * 0.25) return true;
+            b.img.destroy();
+            this.flash(b.img.x, b.img.y, COLORS[b.target.color].hex, 0.7);
+            if (b.target.hit()) this.onDestroyed(b.target);
+            return false;
         });
         this.checkStageClear();
     }
@@ -492,7 +682,7 @@ export class Game extends Phaser.Scene {
     /** angle: degrees from straight down, positive towards +x. */
     private spawnEnemyBullet(owner: Target, at: { x: number; y: number }, angle: number) {
         const a = Phaser.Math.DegToRad(angle);
-        const img = this.add.image(at.x, at.y, 'ebullet').setTint(COLORS[owner.color].hex).setDepth(DEPTH.bullets);
+        const img = this.add.image(at.x, at.y, `eshot-${owner.color}`).setBlendMode(Phaser.BlendModes.ADD).setDepth(DEPTH.bullets);
         this.enemyBullets.push({ img, owner, vx: Math.sin(a) * TIMING.enemyBulletSpeed, vy: Math.cos(a) * TIMING.enemyBulletSpeed });
     }
 
@@ -507,6 +697,7 @@ export class Game extends Phaser.Scene {
             }
             b.img.x += b.vx * dt;
             b.img.y += b.vy * dt;
+            b.img.rotation += 5 * dt;
             if (b.img.x < -30 || b.img.x > WIDTH + 30) {
                 b.img.destroy();
                 return false;
@@ -534,32 +725,44 @@ export class Game extends Phaser.Scene {
         }
     }
 
+    /** Small additive flash: muzzle flashes and bullet hits. */
+    private flash(x: number, y: number, color: number, scale: number) {
+        const f = this.add.image(x, y, 'glow').setTint(color).setBlendMode(Phaser.BlendModes.ADD).setScale(scale * 0.35).setDepth(DEPTH.fx);
+        this.tweens.add({ targets: f, scale: scale * 0.6, alpha: 0, duration: 120, onComplete: () => f.destroy() });
+    }
+
     private explosion(x: number, y: number, color: number, scale: number) {
-        const flash = this.add.image(x, y, 'spark').setDepth(DEPTH.fx).setScale(scale * 3).setBlendMode(Phaser.BlendModes.ADD);
-        this.tweens.add({ targets: flash, scale: scale * 7, alpha: 0, duration: 260, onComplete: () => flash.destroy() });
+        const add = Phaser.BlendModes.ADD;
+        // Bright core, coloured bloom and a shockwave ring.
+        const core = this.add.image(x, y, 'glow').setBlendMode(add).setScale(scale * 0.4).setAlpha(0.9).setDepth(DEPTH.fx);
+        const bloom = this.add.image(x, y, 'glow').setTint(color).setBlendMode(add).setScale(scale * 0.6).setAlpha(0.6).setDepth(DEPTH.fx);
+        const ring = this.add.image(x, y, 'ring').setTint(color).setBlendMode(add).setScale(scale * 0.25).setAlpha(0.8).setDepth(DEPTH.fx);
+        this.tweens.add({ targets: core, scale: scale * 0.8, alpha: 0, duration: 200, onComplete: () => core.destroy() });
+        this.tweens.add({ targets: bloom, scale: scale * 1.3, alpha: 0, duration: 380, ease: 'Quad.easeOut', onComplete: () => bloom.destroy() });
+        this.tweens.add({ targets: ring, scale: scale * 1.4, alpha: 0, duration: 360, ease: 'Cubic.easeOut', onComplete: () => ring.destroy() });
         const p = this.add
             .particles(x, y, 'spark', {
-                speed: { min: 80, max: 380 * scale },
-                scale: { start: 0.9 * Math.min(scale, 1.4), end: 0 },
-                lifespan: { min: 280, max: 650 },
-                tint: color,
-                blendMode: Phaser.BlendModes.ADD,
+                speed: { min: 80, max: 420 * scale },
+                scale: { start: 0.9 * Math.min(scale, 1.5), end: 0 },
+                lifespan: { min: 300, max: 750 },
+                tint: [color, 0xffffff, 0xffb347],
+                blendMode: add,
                 emitting: false
             })
             .setDepth(DEPTH.fx);
-        p.explode(Math.max(4, Math.round(16 * scale)));
-        this.time.delayedCall(900, () => p.destroy());
+        p.explode(Math.max(6, Math.round(22 * scale)));
+        this.time.delayedCall(1000, () => p.destroy());
     }
 
     // ---------------------------------------------------------------- end of level
 
     private checkStuck(delta: number, canShoot: boolean) {
-        if (this.ended || !this.stageActive || canShoot || this.launching > 0 || this.bullets.length > 0) {
+        if (this.ended || !this.stageActive || canShoot || this.launching > 0 || this.arriving > 0 || this.bullets.length > 0) {
             this.idleMs = 0;
             return;
         }
         const full = this.zone.length >= RULES.flightZoneCapacity;
-        const anyTappable = this.board.some((line) => line.some((f) => f && findExitPath(this.grid, f)));
+        const anyTappable = this.board.some((line) => line.some((f) => f && canLaunch(this.grid, f)));
         if (!full && anyTappable) {
             this.idleMs = 0;
             return;
@@ -574,18 +777,18 @@ export class Game extends Phaser.Scene {
         this.ended = true;
         markCleared(this.level.id);
         const hasNext = this.index + 1 < LEVELS.length;
-        this.panel('Level cleared!', `Flight zone hp left: ${this.hp}/${this.maxHp}`, [
-            hasNext ? { text: 'Next level', fill: 0x2f9e5b, onClick: () => this.scene.start('Game', { index: this.index + 1 }) } : null,
-            { text: 'Replay', fill: 0x3b3b55, onClick: () => this.scene.restart({ index: this.index }) },
-            { text: 'Levels', fill: 0x3b3b55, onClick: () => this.scene.start('Menu') }
+        this.panel('Level cleared!', RULES.enemyFire ? `Flight zone hp left: ${this.hp}/${this.maxHp}` : 'Every stage cleared.', [
+            hasNext ? { text: 'Next level', fill: 0x13502e, onClick: () => this.scene.start('Game', { index: this.index + 1 }) } : null,
+            { text: 'Replay', fill: 0x16213a, onClick: () => this.scene.restart({ index: this.index }) },
+            { text: 'Home', fill: 0x16213a, onClick: () => this.scene.start('Menu') }
         ]);
     }
 
     private lose(title: string, subtitle: string) {
         this.ended = true;
         this.panel(title, subtitle, [
-            { text: 'Retry', fill: 0xc0533a, onClick: () => this.scene.restart({ index: this.index }) },
-            { text: 'Levels', fill: 0x3b3b55, onClick: () => this.scene.start('Menu') }
+            { text: 'Retry', fill: 0x5c1a22, onClick: () => this.scene.restart({ index: this.index }) },
+            { text: 'Home', fill: 0x16213a, onClick: () => this.scene.start('Menu') }
         ]);
     }
 
@@ -597,10 +800,7 @@ export class Game extends Phaser.Scene {
         const h = 330 + list.length * 120;
         const top = HEIGHT / 2 - h / 2;
         const g = this.add.graphics().setDepth(DEPTH.panel);
-        g.fillStyle(0x24243a);
-        g.fillRoundedRect(90, top, WIDTH - 180, h, 32);
-        g.lineStyle(4, 0xffffff, 0.12);
-        g.strokeRoundedRect(90, top, WIDTH - 180, h, 32);
+        drawPanel(g, 90, top, WIDTH - 180, h, 0x0c1530, NEON, 32);
         label(this, WIDTH / 2, top + 90, title, title.length > 16 ? 46 : 56).setDepth(DEPTH.panel);
         label(this, WIDTH / 2, top + 190, subtitle, 28, PALETTE.textDim).setAlign('center').setDepth(DEPTH.panel);
         list.forEach((b, i) => button(this, WIDTH / 2, top + 320 + i * 120, 420, 96, b.text, b.onClick, b.fill, 36).setDepth(DEPTH.panel));

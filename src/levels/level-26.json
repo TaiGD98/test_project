@@ -1,0 +1,111 @@
+{
+  "id": 26,
+  "name": "Frost Fog",
+  "hpPerEnemy": 35,
+  "grid": [
+    "RKKY",
+    "YORY",
+    "RKRO",
+    "OYOK"
+  ],
+  "mystery": [
+    "2,2",
+    "3,0",
+    "3,1",
+    "3,2"
+  ],
+  "frozen": {
+    "0,1": 3,
+    "0,0": 5
+  },
+  "stages": [
+    {
+      "enemies": [
+        {
+          "size": "medium",
+          "color": "K",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "R",
+          "count": 3
+        },
+        {
+          "size": "large",
+          "color": "R",
+          "count": 2
+        },
+        {
+          "size": "small",
+          "color": "K",
+          "count": 2
+        },
+        {
+          "size": "large",
+          "color": "Y",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "enemies": [
+        {
+          "size": "large",
+          "color": "O"
+        },
+        {
+          "size": "small",
+          "color": "K"
+        },
+        {
+          "size": "large",
+          "color": "K"
+        },
+        {
+          "size": "small",
+          "color": "O"
+        },
+        {
+          "size": "medium",
+          "color": "K",
+          "count": 4
+        },
+        {
+          "size": "medium",
+          "color": "O",
+          "count": 4
+        },
+        {
+          "size": "large",
+          "color": "Y",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "boss": {
+        "name": "Hoarfrost",
+        "parts": [
+          {
+            "color": "R",
+            "hp": 36
+          },
+          {
+            "color": "Y",
+            "hp": 36
+          },
+          {
+            "color": "K",
+            "hp": 18
+          },
+          {
+            "color": "O",
+            "hp": 36
+          }
+        ],
+        "design": "mantis"
+      }
+    }
+  ]
+}

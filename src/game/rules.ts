@@ -8,6 +8,11 @@ export const RULES = {
     defaultAmmo: 18,
     /** Hits each regular enemy size takes. */
     enemyHp: { small: 3, medium: 6, large: 9 },
+    /**
+     * Temporarily off: enemies don't shoot and the flight zone has no HP (no HP bar, can't be
+     * destroyed). Set to true to bring both back; all the code is still in place.
+     */
+    enemyFire: false,
     /** Seconds between two shots of a regular enemy. */
     enemyFireInterval: 3,
     /** Flight-zone hp lost per enemy bullet that lands. */

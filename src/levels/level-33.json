@@ -1,0 +1,224 @@
+{
+  "id": 33,
+  "name": "Dark Elevators",
+  "hpPerEnemy": 20,
+  "grid": [
+    ">BGPGR",
+    "BPCPRR",
+    "RBPK#G",
+    "RBvKRC",
+    "PKBCGC"
+  ],
+  "elevators": {
+    "0,0": "GCB",
+    "3,2": "KKCP"
+  },
+  "mystery": [
+    "1,1",
+    "2,5",
+    "3,0",
+    "3,1",
+    "3,3",
+    "3,5",
+    "4,3",
+    "4,5"
+  ],
+  "stages": [
+    {
+      "enemies": [
+        {
+          "size": "medium",
+          "color": "P",
+          "count": 2
+        },
+        {
+          "size": "large",
+          "color": "G",
+          "count": 2
+        },
+        {
+          "size": "large",
+          "color": "K",
+          "count": 2
+        },
+        {
+          "size": "large",
+          "color": "R",
+          "count": 4
+        },
+        {
+          "size": "medium",
+          "color": "G",
+          "count": 3
+        },
+        {
+          "size": "small",
+          "color": "P",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "enemies": [
+        {
+          "size": "large",
+          "color": "B",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "G",
+          "count": 3
+        },
+        {
+          "size": "medium",
+          "color": "C",
+          "count": 3
+        }
+      ]
+    },
+    {
+      "enemies": [
+        {
+          "size": "large",
+          "color": "C"
+        },
+        {
+          "size": "medium",
+          "color": "C",
+          "count": 4
+        },
+        {
+          "size": "small",
+          "color": "C"
+        },
+        {
+          "size": "large",
+          "color": "P",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "enemies": [
+        {
+          "size": "large",
+          "color": "B"
+        },
+        {
+          "size": "medium",
+          "color": "P"
+        },
+        {
+          "size": "small",
+          "color": "P"
+        },
+        {
+          "size": "medium",
+          "color": "R"
+        },
+        {
+          "size": "medium",
+          "color": "K",
+          "count": 3
+        },
+        {
+          "size": "small",
+          "color": "B"
+        },
+        {
+          "size": "large",
+          "color": "R"
+        },
+        {
+          "size": "small",
+          "color": "R"
+        },
+        {
+          "size": "large",
+          "color": "P"
+        },
+        {
+          "size": "medium",
+          "color": "B"
+        }
+      ]
+    },
+    {
+      "enemies": [
+        {
+          "size": "medium",
+          "color": "C"
+        },
+        {
+          "size": "small",
+          "color": "C"
+        },
+        {
+          "size": "large",
+          "color": "K",
+          "count": 2
+        },
+        {
+          "size": "large",
+          "color": "B",
+          "count": 5
+        },
+        {
+          "size": "medium",
+          "color": "R",
+          "count": 3
+        },
+        {
+          "size": "large",
+          "color": "C"
+        },
+        {
+          "size": "large",
+          "color": "G",
+          "count": 2
+        },
+        {
+          "size": "small",
+          "color": "B"
+        },
+        {
+          "size": "medium",
+          "color": "B"
+        }
+      ]
+    },
+    {
+      "boss": {
+        "name": "Umbra",
+        "parts": [
+          {
+            "color": "B",
+            "hp": 18
+          },
+          {
+            "color": "P",
+            "hp": 36
+          },
+          {
+            "color": "C",
+            "hp": 36
+          },
+          {
+            "color": "R",
+            "hp": 36
+          },
+          {
+            "color": "G",
+            "hp": 18
+          },
+          {
+            "color": "K",
+            "hp": 36
+          }
+        ],
+        "design": "dreadnought"
+      }
+    }
+  ]
+}

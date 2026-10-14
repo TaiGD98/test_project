@@ -1,0 +1,245 @@
+{
+  "id": 15,
+  "name": "Dark Hangar",
+  "hpPerEnemy": 20,
+  "grid": [
+    "BKKPGY",
+    "CPYCYG",
+    "BBPKPG",
+    "RC#Y#K",
+    "RRBCRR",
+    "GGBPCY"
+  ],
+  "mystery": [
+    "1,0",
+    "1,5",
+    "2,1",
+    "2,3",
+    "2,4",
+    "3,1",
+    "4,2",
+    "4,3",
+    "4,4",
+    "5,3",
+    "5,4",
+    "5,5"
+  ],
+  "stages": [
+    {
+      "enemies": [
+        {
+          "size": "large",
+          "color": "Y"
+        },
+        {
+          "size": "medium",
+          "color": "Y"
+        },
+        {
+          "size": "large",
+          "color": "P",
+          "count": 2
+        },
+        {
+          "size": "small",
+          "color": "Y"
+        }
+      ]
+    },
+    {
+      "enemies": [
+        {
+          "size": "medium",
+          "color": "G"
+        },
+        {
+          "size": "medium",
+          "color": "P"
+        },
+        {
+          "size": "small",
+          "color": "G"
+        },
+        {
+          "size": "large",
+          "color": "K",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "C",
+          "count": 2
+        },
+        {
+          "size": "large",
+          "color": "P"
+        },
+        {
+          "size": "large",
+          "color": "Y",
+          "count": 2
+        },
+        {
+          "size": "large",
+          "color": "G"
+        },
+        {
+          "size": "small",
+          "color": "P"
+        },
+        {
+          "size": "small",
+          "color": "C",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "enemies": [
+        {
+          "size": "large",
+          "color": "K"
+        },
+        {
+          "size": "medium",
+          "color": "B"
+        },
+        {
+          "size": "small",
+          "color": "C",
+          "count": 2
+        },
+        {
+          "size": "small",
+          "color": "B"
+        },
+        {
+          "size": "small",
+          "color": "K"
+        },
+        {
+          "size": "large",
+          "color": "B"
+        },
+        {
+          "size": "medium",
+          "color": "C",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "K"
+        }
+      ]
+    },
+    {
+      "enemies": [
+        {
+          "size": "large",
+          "color": "R"
+        },
+        {
+          "size": "medium",
+          "color": "R",
+          "count": 4
+        },
+        {
+          "size": "large",
+          "color": "K",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "Y",
+          "count": 3
+        },
+        {
+          "size": "medium",
+          "color": "P",
+          "count": 2
+        },
+        {
+          "size": "small",
+          "color": "R"
+        },
+        {
+          "size": "small",
+          "color": "P",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "enemies": [
+        {
+          "size": "medium",
+          "color": "G",
+          "count": 6
+        },
+        {
+          "size": "medium",
+          "color": "R",
+          "count": 2
+        },
+        {
+          "size": "small",
+          "color": "R",
+          "count": 2
+        },
+        {
+          "size": "large",
+          "color": "B",
+          "count": 6
+        },
+        {
+          "size": "large",
+          "color": "C"
+        },
+        {
+          "size": "small",
+          "color": "C"
+        },
+        {
+          "size": "medium",
+          "color": "C"
+        }
+      ]
+    },
+    {
+      "boss": {
+        "name": "Night Raptor",
+        "parts": [
+          {
+            "color": "C",
+            "hp": 36
+          },
+          {
+            "color": "R",
+            "hp": 36
+          },
+          {
+            "color": "K",
+            "hp": 18
+          },
+          {
+            "color": "Y",
+            "hp": 36
+          },
+          {
+            "color": "B",
+            "hp": 18
+          },
+          {
+            "color": "G",
+            "hp": 36
+          },
+          {
+            "color": "P",
+            "hp": 36
+          }
+        ],
+        "design": "raptor"
+      }
+    }
+  ]
+}

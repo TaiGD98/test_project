@@ -21,11 +21,11 @@ Read the stage ──► Pick a fighter ──► It taxis out and joins the fli
 Two pressures pull against each other:
 
 - **Space.** Only 5 fighters fly at once. A fighter whose colour isn't reachable right now (not in the stage, or shielded behind other enemies) just patrols and takes up a slot. Fill all 5 slots with idle fighters and the level is lost.
-- **Time.** Every enemy and boss part fires at the flight zone. The longer a stage lasts, the more zone HP it costs, so hesitating, or launching fighters that can't shoot yet, is punished. On bosses, killing the parts with the nastiest weapons first saves HP.
+- **Time** (off for now, with enemy fire). Every enemy and boss part fires at the flight zone. The longer a stage lasts, the more zone HP it costs, so hesitating, or launching fighters that can't shoot yet, is punished. On bosses, killing the parts with the nastiest weapons first saves HP.
 
 ## 2.2 Level loop <Badge type="tip" text="Live" />
 
-Level select → play → **Level cleared!** (Next level / Replay / Levels) or **Flight zone destroyed** / **Out of space** / **No moves left** (Retry / Levels). Cleared levels get a ✓ on the level select screen (stored in the browser's local storage).
+Home (**FIGHTER FORCE** + **PLAY**) → Play starts the first level not yet cleared → **Level cleared!** (Next level / Replay / Home) or **Flight zone destroyed** / **Out of space** / **No moves left** (Retry / Home). Cleared levels are remembered in the browser's local storage.
 
 ## 2.3 Long-term loop <Badge type="warning" text="Coming soon" />
 

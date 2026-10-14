@@ -2,9 +2,9 @@
 layout: home
 
 hero:
-  name: Prototype Test
+  name: Fighter Force
   text: Phaser 4 prototype
-  tagline: A puzzle game built with Phaser 4
+  tagline: A colour-matching space shooter puzzle built with Phaser 4
   actions:
     - theme: brand
       text: Game Design Document

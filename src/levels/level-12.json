@@ -1,0 +1,113 @@
+{
+  "id": 12,
+  "name": "Blind Spot",
+  "hpPerEnemy": 35,
+  "grid": [
+    "GGGP",
+    "OPOG",
+    "PPO#",
+    "OPGO"
+  ],
+  "mystery": [
+    "1,1",
+    "2,0",
+    "3,0",
+    "3,3"
+  ],
+  "stages": [
+    {
+      "enemies": [
+        {
+          "size": "large",
+          "color": "O",
+          "count": 2
+        },
+        {
+          "size": "large",
+          "color": "P",
+          "count": 4
+        },
+        {
+          "size": "large",
+          "color": "G",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "enemies": [
+        {
+          "size": "large",
+          "color": "G",
+          "count": 2
+        },
+        {
+          "size": "small",
+          "color": "O"
+        },
+        {
+          "size": "medium",
+          "color": "O"
+        },
+        {
+          "size": "large",
+          "color": "O"
+        }
+      ]
+    },
+    {
+      "enemies": [
+        {
+          "size": "medium",
+          "color": "O",
+          "count": 2
+        },
+        {
+          "size": "small",
+          "color": "O",
+          "count": 2
+        },
+        {
+          "size": "small",
+          "color": "G",
+          "count": 2
+        },
+        {
+          "size": "large",
+          "color": "P",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "G",
+          "count": 5
+        },
+        {
+          "size": "large",
+          "color": "O",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "boss": {
+        "name": "Shade Hawk",
+        "parts": [
+          {
+            "color": "O",
+            "hp": 18
+          },
+          {
+            "color": "G",
+            "hp": 18
+          },
+          {
+            "color": "P",
+            "hp": 36
+          }
+        ],
+        "design": "raptor"
+      }
+    }
+  ]
+}

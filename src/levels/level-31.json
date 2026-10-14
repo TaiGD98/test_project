@@ -1,0 +1,190 @@
+{
+  "id": 31,
+  "name": "Glacier Lift",
+  "hpPerEnemy": 25,
+  "grid": [
+    "CPRBR",
+    "BBRPv",
+    ">CYBC",
+    "BPCYY",
+    "#CCYP"
+  ],
+  "elevators": {
+    "1,4": "RBR",
+    "2,0": "PYYR"
+  },
+  "frozen": {
+    "0,4": 4,
+    "0,3": 6
+  },
+  "stages": [
+    {
+      "enemies": [
+        {
+          "size": "large",
+          "color": "C",
+          "count": 2
+        },
+        {
+          "size": "large",
+          "color": "R",
+          "count": 2
+        },
+        {
+          "size": "large",
+          "color": "B",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "enemies": [
+        {
+          "size": "large",
+          "color": "C"
+        },
+        {
+          "size": "medium",
+          "color": "C"
+        },
+        {
+          "size": "large",
+          "color": "B",
+          "count": 3
+        },
+        {
+          "size": "small",
+          "color": "C"
+        },
+        {
+          "size": "medium",
+          "color": "P",
+          "count": 3
+        },
+        {
+          "size": "small",
+          "color": "R",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "B"
+        },
+        {
+          "size": "small",
+          "color": "B"
+        },
+        {
+          "size": "medium",
+          "color": "R",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "enemies": [
+        {
+          "size": "large",
+          "color": "Y",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "P",
+          "count": 3
+        },
+        {
+          "size": "large",
+          "color": "R",
+          "count": 2
+        },
+        {
+          "size": "small",
+          "color": "Y",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "Y",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "enemies": [
+        {
+          "size": "large",
+          "color": "Y",
+          "count": 4
+        },
+        {
+          "size": "large",
+          "color": "C",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "enemies": [
+        {
+          "size": "medium",
+          "color": "P",
+          "count": 3
+        },
+        {
+          "size": "small",
+          "color": "C",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "C",
+          "count": 5
+        },
+        {
+          "size": "large",
+          "color": "R",
+          "count": 2
+        },
+        {
+          "size": "large",
+          "color": "P",
+          "count": 2
+        },
+        {
+          "size": "large",
+          "color": "B",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "boss": {
+        "name": "Ice Empress",
+        "parts": [
+          {
+            "color": "C",
+            "hp": 18
+          },
+          {
+            "color": "P",
+            "hp": 18
+          },
+          {
+            "color": "R",
+            "hp": 36
+          },
+          {
+            "color": "B",
+            "hp": 36
+          },
+          {
+            "color": "Y",
+            "hp": 36
+          }
+        ],
+        "design": "mantis"
+      }
+    }
+  ]
+}

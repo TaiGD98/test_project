@@ -1,0 +1,70 @@
+{
+  "id": 21,
+  "name": "Cold Start",
+  "hpPerEnemy": 40,
+  "tutorial": {
+    "steps": [
+      {
+        "focus": "frozen",
+        "text": "This fighter is frozen solid.\nIt can't take off yet"
+      },
+      {
+        "focus": "frozen",
+        "text": "Launch {n} fighters from anywhere\nand the ice will break"
+      }
+    ],
+    "onThaw": "The ice broke! Send it up\nonce it has a way out"
+  },
+  "grid": [
+    "BBB",
+    "YYB",
+    "BYY"
+  ],
+  "frozen": {
+    "1,2": 3
+  },
+  "stages": [
+    {
+      "enemies": [
+        {
+          "size": "small",
+          "color": "B",
+          "count": 3
+        },
+        {
+          "size": "medium",
+          "color": "Y",
+          "count": 6
+        },
+        {
+          "size": "large",
+          "color": "B"
+        },
+        {
+          "size": "medium",
+          "color": "B",
+          "count": 6
+        }
+      ]
+    },
+    {
+      "enemies": [
+        {
+          "size": "medium",
+          "color": "B",
+          "count": 3
+        },
+        {
+          "size": "large",
+          "color": "B",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "Y",
+          "count": 6
+        }
+      ]
+    }
+  ]
+}

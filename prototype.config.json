@@ -1,6 +1,6 @@
 {
-  "title": "Prototype Test",
-  "tagline": "A puzzle game built with Phaser 4",
+  "title": "Fighter Force",
+  "tagline": "A colour-matching space shooter puzzle built with Phaser 4",
   "repo": "TaiGD98/test_project",
   "pagesUrl": "https://taigd98.github.io/test_project",
   "basePath": "/test_project",

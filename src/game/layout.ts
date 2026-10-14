@@ -28,8 +28,6 @@ export const TIMING = {
     fireInterval: 0.11,
     /** Bullet speed in px/s (straight up). */
     bulletSpeed: 1900,
-    /** Within this distance of its target a bullet steers into the target's centre (px). */
-    bulletHomingRange: 90,
     /** Speed a fighter moves at to line up under its target (px/s). */
     alignSpeed: 1100,
     /** A fighter fires once it is within this many px of its aim point. */
@@ -63,7 +61,7 @@ export const BLOCK_OVERLAP = 8;
 export const FIGHTER_ZONE_SIZE = 92;
 
 export const PALETTE = {
-    background: 0x1b1b24,
+    background: 0x05060f,
     enemyArea: 0x20202c,
     zone: 0x2a2a3a,
     zoneLine: 0x4b4b66,
@@ -71,6 +69,6 @@ export const PALETTE = {
     wall: 0x55556e,
     wallEdge: 0x77779a,
     text: '#ffffff',
-    textDim: '#9a9ab4',
+    textDim: '#a9c4e8',
     danger: '#ff6b6b'
 } as const;

@@ -1,0 +1,126 @@
+{
+  "id": 13,
+  "name": "Masquerade",
+  "hpPerEnemy": 30,
+  "grid": [
+    "KKKC",
+    "POOO",
+    "KPCC",
+    "OPCP"
+  ],
+  "mystery": [
+    "1,1",
+    "1,2",
+    "2,1",
+    "2,2",
+    "2,3",
+    "3,0"
+  ],
+  "stages": [
+    {
+      "enemies": [
+        {
+          "size": "medium",
+          "color": "C",
+          "count": 2
+        },
+        {
+          "size": "small",
+          "color": "K",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "O"
+        },
+        {
+          "size": "small",
+          "color": "O"
+        },
+        {
+          "size": "small",
+          "color": "C",
+          "count": 2
+        },
+        {
+          "size": "large",
+          "color": "P",
+          "count": 2
+        },
+        {
+          "size": "large",
+          "color": "O",
+          "count": 3
+        },
+        {
+          "size": "medium",
+          "color": "K",
+          "count": 5
+        }
+      ]
+    },
+    {
+      "enemies": [
+        {
+          "size": "medium",
+          "color": "K",
+          "count": 2
+        },
+        {
+          "size": "small",
+          "color": "O",
+          "count": 2
+        },
+        {
+          "size": "small",
+          "color": "K",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "P",
+          "count": 2
+        },
+        {
+          "size": "large",
+          "color": "C",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "O",
+          "count": 2
+        },
+        {
+          "size": "small",
+          "color": "P",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "boss": {
+        "name": "Veil Mantis",
+        "parts": [
+          {
+            "color": "K",
+            "hp": 18
+          },
+          {
+            "color": "C",
+            "hp": 36
+          },
+          {
+            "color": "P",
+            "hp": 36
+          },
+          {
+            "color": "O",
+            "hp": 18
+          }
+        ],
+        "design": "mantis"
+      }
+    }
+  ]
+}

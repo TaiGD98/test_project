@@ -1,0 +1,154 @@
+{
+  "id": 14,
+  "name": "Smoke Screen",
+  "hpPerEnemy": 25,
+  "grid": [
+    "GPBCY",
+    "#YPGG",
+    "YBGPC",
+    "BCBYY",
+    "BCPCG"
+  ],
+  "mystery": [
+    "1,1",
+    "1,4",
+    "2,3",
+    "3,0",
+    "3,2",
+    "4,1",
+    "4,2",
+    "4,3"
+  ],
+  "stages": [
+    {
+      "enemies": [
+        {
+          "size": "medium",
+          "color": "C",
+          "count": 3
+        },
+        {
+          "size": "medium",
+          "color": "B",
+          "count": 2
+        },
+        {
+          "size": "large",
+          "color": "P",
+          "count": 2
+        },
+        {
+          "size": "small",
+          "color": "B",
+          "count": 2
+        },
+        {
+          "size": "large",
+          "color": "G",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "G",
+          "count": 3
+        },
+        {
+          "size": "large",
+          "color": "Y",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "enemies": [
+        {
+          "size": "small",
+          "color": "C",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "C",
+          "count": 2
+        },
+        {
+          "size": "large",
+          "color": "G",
+          "count": 2
+        },
+        {
+          "size": "large",
+          "color": "P",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "B",
+          "count": 2
+        },
+        {
+          "size": "small",
+          "color": "B",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "enemies": [
+        {
+          "size": "small",
+          "color": "C",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "B",
+          "count": 3
+        },
+        {
+          "size": "medium",
+          "color": "C",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "G",
+          "count": 3
+        },
+        {
+          "size": "large",
+          "color": "Y",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "boss": {
+        "name": "Eclipse Ring",
+        "parts": [
+          {
+            "color": "B",
+            "hp": 36
+          },
+          {
+            "color": "Y",
+            "hp": 36
+          },
+          {
+            "color": "P",
+            "hp": 36
+          },
+          {
+            "color": "G",
+            "hp": 18
+          },
+          {
+            "color": "C",
+            "hp": 36
+          }
+        ],
+        "design": "dreadnought"
+      }
+    }
+  ]
+}

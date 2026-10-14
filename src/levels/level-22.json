@@ -1,0 +1,108 @@
+{
+  "id": 22,
+  "name": "Permafrost",
+  "hpPerEnemy": 35,
+  "grid": [
+    "RPRY",
+    "RPYY",
+    "PPRR",
+    "YPPY"
+  ],
+  "frozen": {
+    "1,1": 3,
+    "1,2": 4
+  },
+  "stages": [
+    {
+      "enemies": [
+        {
+          "size": "small",
+          "color": "Y",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "Y",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "P",
+          "count": 2
+        },
+        {
+          "size": "large",
+          "color": "P",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "R",
+          "count": 2
+        },
+        {
+          "size": "large",
+          "color": "R",
+          "count": 2
+        },
+        {
+          "size": "small",
+          "color": "R",
+          "count": 2
+        },
+        {
+          "size": "small",
+          "color": "P",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "enemies": [
+        {
+          "size": "large",
+          "color": "Y"
+        },
+        {
+          "size": "small",
+          "color": "Y"
+        },
+        {
+          "size": "medium",
+          "color": "Y",
+          "count": 4
+        },
+        {
+          "size": "large",
+          "color": "P",
+          "count": 4
+        },
+        {
+          "size": "large",
+          "color": "R",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "boss": {
+        "name": "Frost Talon",
+        "parts": [
+          {
+            "color": "Y",
+            "hp": 36
+          },
+          {
+            "color": "R",
+            "hp": 36
+          },
+          {
+            "color": "P",
+            "hp": 36
+          }
+        ],
+        "design": "raptor"
+      }
+    }
+  ]
+}

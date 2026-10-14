@@ -1,0 +1,119 @@
+{
+  "id": 17,
+  "name": "Shadow Lift",
+  "hpPerEnemy": 35,
+  "grid": [
+    "BBKK",
+    "OGKO",
+    "GvOK",
+    "BG#G"
+  ],
+  "elevators": {
+    "2,1": "BOK"
+  },
+  "mystery": [
+    "2,0",
+    "2,2",
+    "2,3",
+    "3,0"
+  ],
+  "stages": [
+    {
+      "enemies": [
+        {
+          "size": "medium",
+          "color": "K",
+          "count": 3
+        },
+        {
+          "size": "medium",
+          "color": "O",
+          "count": 3
+        },
+        {
+          "size": "large",
+          "color": "K",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "enemies": [
+        {
+          "size": "medium",
+          "color": "K"
+        },
+        {
+          "size": "small",
+          "color": "K"
+        },
+        {
+          "size": "large",
+          "color": "G",
+          "count": 3
+        },
+        {
+          "size": "small",
+          "color": "G"
+        },
+        {
+          "size": "large",
+          "color": "B",
+          "count": 3
+        },
+        {
+          "size": "large",
+          "color": "O"
+        },
+        {
+          "size": "medium",
+          "color": "G"
+        },
+        {
+          "size": "small",
+          "color": "O"
+        },
+        {
+          "size": "small",
+          "color": "B"
+        },
+        {
+          "size": "large",
+          "color": "K"
+        },
+        {
+          "size": "medium",
+          "color": "O"
+        },
+        {
+          "size": "medium",
+          "color": "B"
+        }
+      ]
+    },
+    {
+      "boss": {
+        "name": "Gloom Saucer",
+        "parts": [
+          {
+            "color": "K",
+            "hp": 18
+          },
+          {
+            "color": "O",
+            "hp": 36
+          },
+          {
+            "color": "B",
+            "hp": 36
+          },
+          {
+            "color": "G",
+            "hp": 36
+          }
+        ],
+        "design": "dreadnought"
+      }
+    }
+  ]
+}

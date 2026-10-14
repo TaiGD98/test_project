@@ -3,10 +3,13 @@
 // It models a patient player: after each tap, fighters in the flight zone shoot until nothing
 // they can hit is left. Like the game, the oldest fighter of a colour spends its ammo first,
 // fighters always shoot the frontmost visible target of their colour (then left to right),
+// elevators push their next fighter into the cell they face as soon as it is vacated,
+// every launch lowers each frozen fighter's counter by 1 (frozen fighters can't launch),
+// and mystery fighters are treated as known (the player discovers them; the solver doesn't need to),
 // and shielded targets can't be hit. Time and flight-zone hp are not modelled.
 
 import { RULES, type ColorKey } from '../../src/game/rules.ts';
-import { byPriority, findExitPath, isShielded, layoutStage, parseGrid, type Cell, type LevelData, type TargetSpec } from '../../src/game/logic.ts';
+import { byPriority, canLaunch, isShielded, layoutStage, parseGrid, releaseElevator, thawStep, type Cell, type LevelData, type TargetSpec } from '../../src/game/logic.ts';
 
 export interface Move {
     row: number;
@@ -65,7 +68,7 @@ export function moves(s: State): Move[] {
     if (s.zone.length >= RULES.flightZoneCapacity) return out;
     s.grid.forEach((line, row) =>
         line.forEach((c, col) => {
-            if (c.kind === 'fighter' && findExitPath(s.grid, { row, col })) out.push({ row, col });
+            if (c.kind === 'fighter' && canLaunch(s.grid, { row, col })) out.push({ row, col });
         })
     );
     return out;
@@ -75,6 +78,8 @@ export function apply(level: LevelData, s: State, m: Move): State {
     const grid = s.grid.map((r) => r.slice());
     const c = grid[m.row][m.col] as Extract<Cell, { kind: 'fighter' }>;
     grid[m.row][m.col] = { kind: 'empty' };
+    releaseElevator(grid, m);
+    thawStep(grid);
     const next: State = {
         grid,
         zone: [...s.zone.map((f) => ({ ...f })), { color: c.color, ammo: c.ammo }],
@@ -86,7 +91,7 @@ export function apply(level: LevelData, s: State, m: Move): State {
 }
 
 const key = (s: State) =>
-    s.grid.map((r) => r.map((c) => (c.kind === 'fighter' ? c.color : '.')).join('')).join('/') +
+    s.grid.map((r) => r.map((c) => (c.kind === 'fighter' ? c.color + (c.frozen ?? '') : c.kind === 'elevator' ? c.queue.length : '.')).join('')).join('/') +
     '|' + s.zone.map((f) => f.color + f.ammo).join(',') + '|' + s.stage + '|' + s.targets.map((t) => t.hp).join(',');
 
 /** Depth-first search for a winning tap order. */

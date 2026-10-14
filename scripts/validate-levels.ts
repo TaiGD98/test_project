@@ -27,13 +27,18 @@ for (const f of files) {
         console.log(`FAIL  ${f}  ${level.name}: no winning tap order found (${nodes} states searched)`);
         continue;
     }
-    const cells = level.grid.join('');
-    const fighters = cells.replace(/#/g, '').length;
-    const colors = new Set(cells.replace(/#/g, '')).size;
+    const all = level.grid.join('').replace(/[^RBGYPOCK]/g, '') + Object.values(level.elevators ?? {}).join('');
+    const fighters = all.length;
+    const colors = new Set(all).size;
+    const obstacles = [
+        Object.keys(level.elevators ?? {}).length && 'E' + Object.keys(level.elevators ?? {}).length,
+        level.mystery?.length && 'M' + level.mystery.length,
+        Object.keys(level.frozen ?? {}).length && 'F' + Object.keys(level.frozen ?? {}).length
+    ].filter(Boolean).join(' ');
     const size = `${level.grid[0].length}x${level.grid.length}`;
     const boss = level.stages.at(-1)?.boss ? ' + boss' : '       ';
     console.log(
-        `OK    ${f}  ${level.name.padEnd(13)} ${size.padEnd(4)} ${String(fighters).padStart(2)} fighters ${colors} colours ` +
+        `OK    ${f}  ${level.name.padEnd(15)} ${size.padEnd(4)} ${String(fighters).padStart(2)} fighters ${colors} colours ${obstacles.padEnd(9)} ` +
             `${level.stages.length} stages${boss}  zone hp ${String(zoneHp(level)).padStart(4)} (${level.hpPerEnemy} x ${enemyCount(level)}${level.zoneHpBonus ? ` + ${level.zoneHpBonus}` : ''})  ` +
             `random win ${(randomWinRate(level) * 100).toFixed(1)}%`
     );

@@ -8,7 +8,7 @@ import { WIDTH, HEIGHT, PALETTE } from './game/layout';
 // Open with ?level=N to jump straight into a level.
 const config: Phaser.Types.Core.GameConfig = {
     type: Phaser.AUTO,
-    title: 'Prototype Test',
+    title: 'Fighter Force',
     backgroundColor: PALETTE.background,
     scale: {
         mode: Phaser.Scale.FIT,

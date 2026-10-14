@@ -1,0 +1,212 @@
+{
+  "id": 9,
+  "name": "Rush Hour",
+  "hpPerEnemy": 25,
+  "grid": [
+    "YGPGR",
+    "B<GBY",
+    "BGBYB",
+    "PBRvR",
+    "#RPGP"
+  ],
+  "elevators": {
+    "1,1": "PRY",
+    "3,3": "GYR"
+  },
+  "stages": [
+    {
+      "enemies": [
+        {
+          "size": "medium",
+          "color": "G",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "B",
+          "count": 2
+        },
+        {
+          "size": "small",
+          "color": "G",
+          "count": 2
+        },
+        {
+          "size": "small",
+          "color": "R",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "R",
+          "count": 2
+        },
+        {
+          "size": "large",
+          "color": "Y",
+          "count": 2
+        },
+        {
+          "size": "small",
+          "color": "B",
+          "count": 2
+        },
+        {
+          "size": "large",
+          "color": "G",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "enemies": [
+        {
+          "size": "medium",
+          "color": "G",
+          "count": 3
+        },
+        {
+          "size": "medium",
+          "color": "P"
+        },
+        {
+          "size": "medium",
+          "color": "Y",
+          "count": 2
+        },
+        {
+          "size": "small",
+          "color": "Y",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "B"
+        },
+        {
+          "size": "small",
+          "color": "B"
+        },
+        {
+          "size": "small",
+          "color": "P"
+        },
+        {
+          "size": "large",
+          "color": "P"
+        },
+        {
+          "size": "large",
+          "color": "B"
+        }
+      ]
+    },
+    {
+      "enemies": [
+        {
+          "size": "large",
+          "color": "B",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "R",
+          "count": 3
+        },
+        {
+          "size": "large",
+          "color": "R"
+        },
+        {
+          "size": "small",
+          "color": "P",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "G",
+          "count": 3
+        },
+        {
+          "size": "medium",
+          "color": "P",
+          "count": 2
+        },
+        {
+          "size": "small",
+          "color": "B",
+          "count": 2
+        },
+        {
+          "size": "small",
+          "color": "R",
+          "count": 3
+        },
+        {
+          "size": "medium",
+          "color": "B",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "enemies": [
+        {
+          "size": "medium",
+          "color": "P"
+        },
+        {
+          "size": "large",
+          "color": "B",
+          "count": 2
+        },
+        {
+          "size": "large",
+          "color": "Y",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "R",
+          "count": 3
+        },
+        {
+          "size": "large",
+          "color": "P"
+        },
+        {
+          "size": "small",
+          "color": "P"
+        }
+      ]
+    },
+    {
+      "boss": {
+        "name": "Star Bastion",
+        "parts": [
+          {
+            "color": "Y",
+            "hp": 36
+          },
+          {
+            "color": "R",
+            "hp": 36
+          },
+          {
+            "color": "B",
+            "hp": 18
+          },
+          {
+            "color": "G",
+            "hp": 36
+          },
+          {
+            "color": "P",
+            "hp": 36
+          }
+        ],
+        "design": "dreadnought"
+      }
+    }
+  ]
+}

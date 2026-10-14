@@ -1,6 +1,6 @@
-# Prototype Test
+# Fighter Force
 
-A puzzle game built with Phaser 4
+A colour-matching space shooter puzzle built with Phaser 4
 
 A Phaser 4 + TypeScript prototype. Play it at https://taigd98.github.io/test_project/demo/ · docs and Game Design Document at https://taigd98.github.io/test_project/docs/.
 

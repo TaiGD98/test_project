@@ -1,0 +1,230 @@
+{
+  "id": 10,
+  "name": "Endless Hangar",
+  "hpPerEnemy": 20,
+  "grid": [
+    "PGRKYG",
+    "O^KP>R",
+    "KRBCGP",
+    "#BC<CK",
+    "BBCOBP"
+  ],
+  "elevators": {
+    "1,1": "RYY",
+    "1,4": "RYGO",
+    "3,3": "OGY"
+  },
+  "stages": [
+    {
+      "enemies": [
+        {
+          "size": "small",
+          "color": "B"
+        },
+        {
+          "size": "large",
+          "color": "B",
+          "count": 3
+        },
+        {
+          "size": "medium",
+          "color": "K",
+          "count": 3
+        },
+        {
+          "size": "medium",
+          "color": "B"
+        }
+      ]
+    },
+    {
+      "enemies": [
+        {
+          "size": "medium",
+          "color": "R",
+          "count": 3
+        },
+        {
+          "size": "small",
+          "color": "K",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "Y",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "P",
+          "count": 3
+        },
+        {
+          "size": "medium",
+          "color": "K",
+          "count": 2
+        },
+        {
+          "size": "small",
+          "color": "Y",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "enemies": [
+        {
+          "size": "small",
+          "color": "C"
+        },
+        {
+          "size": "small",
+          "color": "P"
+        },
+        {
+          "size": "large",
+          "color": "C"
+        },
+        {
+          "size": "large",
+          "color": "P"
+        },
+        {
+          "size": "medium",
+          "color": "P"
+        },
+        {
+          "size": "medium",
+          "color": "C"
+        }
+      ]
+    },
+    {
+      "enemies": [
+        {
+          "size": "medium",
+          "color": "R",
+          "count": 3
+        },
+        {
+          "size": "large",
+          "color": "Y",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "O",
+          "count": 2
+        },
+        {
+          "size": "small",
+          "color": "P",
+          "count": 2
+        },
+        {
+          "size": "large",
+          "color": "R"
+        },
+        {
+          "size": "medium",
+          "color": "G",
+          "count": 3
+        },
+        {
+          "size": "medium",
+          "color": "P",
+          "count": 2
+        },
+        {
+          "size": "small",
+          "color": "R",
+          "count": 3
+        },
+        {
+          "size": "small",
+          "color": "O",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "enemies": [
+        {
+          "size": "medium",
+          "color": "B",
+          "count": 3
+        },
+        {
+          "size": "medium",
+          "color": "G",
+          "count": 4
+        },
+        {
+          "size": "medium",
+          "color": "O",
+          "count": 2
+        },
+        {
+          "size": "small",
+          "color": "O",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "Y",
+          "count": 3
+        },
+        {
+          "size": "small",
+          "color": "G",
+          "count": 4
+        },
+        {
+          "size": "large",
+          "color": "C",
+          "count": 2
+        }
+      ]
+    },
+    {
+      "boss": {
+        "name": "Void Leviathan",
+        "parts": [
+          {
+            "color": "B",
+            "hp": 36
+          },
+          {
+            "color": "K",
+            "hp": 36
+          },
+          {
+            "color": "O",
+            "hp": 36
+          },
+          {
+            "color": "R",
+            "hp": 36
+          },
+          {
+            "color": "P",
+            "hp": 18
+          },
+          {
+            "color": "Y",
+            "hp": 36
+          },
+          {
+            "color": "C",
+            "hp": 36
+          },
+          {
+            "color": "G",
+            "hp": 36
+          }
+        ],
+        "design": "mantis"
+      }
+    }
+  ]
+}

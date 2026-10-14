@@ -1,0 +1,90 @@
+{
+  "id": 23,
+  "name": "Ice Field",
+  "hpPerEnemy": 30,
+  "grid": [
+    "PCGP",
+    "KKGP",
+    "C#KP",
+    "CGKG"
+  ],
+  "frozen": {
+    "3,3": 2,
+    "3,0": 4,
+    "2,0": 5
+  },
+  "stages": [
+    {
+      "enemies": [
+        {
+          "size": "large",
+          "color": "P",
+          "count": 2
+        },
+        {
+          "size": "large",
+          "color": "G",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "enemies": [
+        {
+          "size": "large",
+          "color": "K",
+          "count": 3
+        },
+        {
+          "size": "small",
+          "color": "K",
+          "count": 3
+        },
+        {
+          "size": "medium",
+          "color": "K",
+          "count": 3
+        },
+        {
+          "size": "small",
+          "color": "C",
+          "count": 2
+        },
+        {
+          "size": "medium",
+          "color": "C",
+          "count": 2
+        },
+        {
+          "size": "large",
+          "color": "P",
+          "count": 4
+        }
+      ]
+    },
+    {
+      "boss": {
+        "name": "Rime Mantis",
+        "parts": [
+          {
+            "color": "C",
+            "hp": 36
+          },
+          {
+            "color": "K",
+            "hp": 18
+          },
+          {
+            "color": "G",
+            "hp": 36
+          },
+          {
+            "color": "P",
+            "hp": 18
+          }
+        ],
+        "design": "mantis"
+      }
+    }
+  ]
+}
